@@ -1,0 +1,10 @@
+User Story: I can add, subtract, multiply and divide two numbers.
+User Story: I can clear the input field with a clear button.
+User Story: I can keep chaining mathematical operations together until I hit the equal button, and the calculator will tell me the correct output.
+
+example: https://codepen.io/freeCodeCamp/full/rLJZrA
+
+How to manage division by zero and othe errors?, should I prevent that they happen?
+Should I use scientific notation for large figures?
+Should I add parenthesis to group the calculations?
+I could design a "retro" screen that displays the marks of the symbols
