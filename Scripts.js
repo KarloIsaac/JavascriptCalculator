@@ -23,7 +23,7 @@ var OperationsPerformer = function() {
 
     this.setArguments= function(argument) {
         complementaryArgument = firstArgument === null ? null : argument;
-        firstArgument = firstArgument === null ? argument : null;
+        firstArgument = firstArgument === null ? argument : firstArgument;
     };
 
     this.setOperationToPerform = function(operationSymbol) {
@@ -53,4 +53,41 @@ var OperationsPerformer = function() {
 };
 
 
-var operationsPerformer = new OperationsPerformer();
+var FiguresAccummulator = function() {
+    var figureText = "";
+
+    this.captureFigureInformation = function(sourceElement) {
+        figureText += sourceElement.innerText;
+    }
+
+    this.flushFigure = function() {
+        var floatValue = Number.parseFloat(figureText);
+        figureText = "";
+        return floatValue;
+    }
+}
+
+
+var figuresAccummulator = new FiguresAccummulator();
+
+
+var OperationsRequestsController = function() {
+    var operationsPerformer = new OperationsPerformer();
+
+    this.processOperationRequest = function(sourceElement) {
+        var firstArgument = figuresAccummulator.flushFigure();
+        operationsPerformer.setArguments(firstArgument);
+        var operationName = sourceElement.id;
+        operationsPerformer.setOperationToPerform(operationName);
+    }
+
+    this.processRetrieveResultRequest = function() {
+        var complementaryArgument = figuresAccummulator.flushFigure();
+        operationsPerformer.setArguments(complementaryArgument);
+        var operationResult = operationsPerformer.retrieveResult();
+        console.log(operationResult);
+    }
+}
+
+
+var operationsRequestsController = new OperationsRequestsController();

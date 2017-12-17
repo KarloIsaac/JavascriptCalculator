@@ -11,27 +11,30 @@
         <h1 id="main-display">0</h1>
         <h4 id="secondary-display">operations</h4>
         <div id="buttons-grid" class="">
-            <button type="button" name="button" id="clear">C</button>
-            <button type="button" name="button" id="divide">&divide</button>
-            <button type="button" name="button" id="multiply">x</button>
-            <button type="button" name="button" id="minus">-</button>
+            <button type="button" id="clear">C</button>
+            <button type="button" id="divide" onclick="operationsRequestsController.processOperationRequest(this)">&divide</button>
+            <button type="button" id="multiply" onclick="operationsRequestsController.processOperationRequest(this)">x</button>
+            <button type="button" id="minus" onclick="operationsRequestsController.processOperationRequest(this)">-</button>
 
-            <button type="button" name="button" id="seven">7</button>
-            <button type="button" name="button" id="eight">8</button>
-            <button type="button" name="button" id="nine">9</button>
-            <button type="button" name="button" id="plus">+</button>
+            <button type="button" onclick="figuresAccummulator.captureFigureInformation(this)">7</button>
+            <button type="button" onclick="figuresAccummulator.captureFigureInformation(this)">8</button>
+            <button type="button" onclick="figuresAccummulator.captureFigureInformation(this)">9</button>
+            <button type="button" id="plus" onclick="operationsRequestsController.processOperationRequest(this)">+</button>
 
-            <button type="button" name="button" id="four">4</button>
-            <button type="button" name="button" id="five">5</button>
-            <button type="button" name="button" id="six">6</button>
+            <button type="button" onclick="figuresAccummulator.captureFigureInformation(this)">4</button>
+            <button type="button" onclick="figuresAccummulator.captureFigureInformation(this)">5</button>
+            <button type="button" onclick="figuresAccummulator.captureFigureInformation(this)">6</button>
 
-            <button type="button" name="button" id="one">1</button>
-            <button type="button" name="button" id="two">2</button>
-            <button type="button" name="button" id="three">3</button>
-            <button type="button" name="button" id="equals">=</button>
+            <button type="button" onclick="figuresAccummulator.captureFigureInformation(this)">1</button>
+            <button type="button" onclick="figuresAccummulator.captureFigureInformation(this)">2</button>
+            <button type="button" onclick="figuresAccummulator.captureFigureInformation(this)">3</button>
+            <button type="button" id="equals"
+                    onclick="operationsRequestsController.processRetrieveResultRequest()">
+                =
+            </button>
 
-            <button type="button" name="button" id="zero">0</button>
-            <button type="button" name="button" id="dot">.</button>
+            <button type="button" onclick="figuresAccummulator.captureFigureInformation(this)" id="zero">0</button>
+            <button type="button" onclick="figuresAccummulator.captureFigureInformation(this)">.</button>
         </div>
     </div>
 </body>
