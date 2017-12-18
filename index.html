@@ -11,30 +11,36 @@
         <h1 id="main-display">0</h1>
         <h4 id="secondary-display">operations</h4>
         <div id="buttons-grid" class="">
-            <button type="button" id="clear">C</button>
-            <button type="button" id="divide" onclick="operationsRequestsController.processOperationRequest(this)">&divide</button>
-            <button type="button" id="multiply" onclick="operationsRequestsController.processOperationRequest(this)">x</button>
-            <button type="button" id="minus" onclick="operationsRequestsController.processOperationRequest(this)">-</button>
-
-            <button type="button" onclick="figuresAccummulator.captureFigureInformation(this)">7</button>
-            <button type="button" onclick="figuresAccummulator.captureFigureInformation(this)">8</button>
-            <button type="button" onclick="figuresAccummulator.captureFigureInformation(this)">9</button>
-            <button type="button" id="plus" onclick="operationsRequestsController.processOperationRequest(this)">+</button>
-
-            <button type="button" onclick="figuresAccummulator.captureFigureInformation(this)">4</button>
-            <button type="button" onclick="figuresAccummulator.captureFigureInformation(this)">5</button>
-            <button type="button" onclick="figuresAccummulator.captureFigureInformation(this)">6</button>
-
-            <button type="button" onclick="figuresAccummulator.captureFigureInformation(this)">1</button>
-            <button type="button" onclick="figuresAccummulator.captureFigureInformation(this)">2</button>
-            <button type="button" onclick="figuresAccummulator.captureFigureInformation(this)">3</button>
-            <button type="button" id="equals"
-                    onclick="operationsRequestsController.processRetrieveResultRequest()">
-                =
+            <button type="button" id="clear" onclick="operationsRequestsController.clear()">C</button>
+            <button type="button" id="divide" onclick="operationsRequestsController.processOperationRequest(this)">
+                &divide;
+            </button>
+            <button type="button" id="multiply" onclick="operationsRequestsController.processOperationRequest(this)">
+                x
+            </button>
+            <button type="button" id="minus" onclick="operationsRequestsController.processOperationRequest(this)">
+                -
             </button>
 
-            <button type="button" onclick="figuresAccummulator.captureFigureInformation(this)" id="zero">0</button>
-            <button type="button" onclick="figuresAccummulator.captureFigureInformation(this)">.</button>
+            <button type="button" onclick="operationsRequestsController.processFigureSettingRequest(this)">7</button>
+            <button type="button" onclick="operationsRequestsController.processFigureSettingRequest(this)">8</button>
+            <button type="button" onclick="operationsRequestsController.processFigureSettingRequest(this)">9</button>
+            <button type="button" id="plus" onclick="operationsRequestsController.processOperationRequest(this)">
+                +
+            </button>
+            <button type="button" onclick="operationsRequestsController.processFigureSettingRequest(this)">4</button>
+            <button type="button" onclick="operationsRequestsController.processFigureSettingRequest(this)">5</button>
+            <button type="button" onclick="operationsRequestsController.processFigureSettingRequest(this)">6</button>
+            <button type="button" onclick="operationsRequestsController.processFigureSettingRequest(this)">1</button>
+            <button type="button" onclick="operationsRequestsController.processFigureSettingRequest(this)">2</button>
+            <button type="button" onclick="operationsRequestsController.processFigureSettingRequest(this)">3</button>
+            <button type="button" id="equals" onclick="operationsRequestsController.processRetrieveResultRequest()">
+                =
+            </button>
+            <button type="button" onclick="operationsRequestsController.processFigureSettingRequest(this)" id="zero">
+                0
+            </button>
+            <button type="button" onclick="operationsRequestsController.processFigureSettingRequest(this)">.</button>
         </div>
     </div>
 </body>

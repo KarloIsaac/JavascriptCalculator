@@ -27,10 +27,14 @@ var OperationsPerformer = function() {
     };
 
     this.setOperationToPerform = function(operationSymbol) {
-        if(firstArgument !== null) {
+        if(this.isReadyToSetOperation()) {
             operationToApply = operationsMap[operationSymbol];
         }
     };
+
+    this.isReadyToSetOperation = function() {
+        return firstArgument !== null;
+    }
 
     this.retrieveResult = function() {
         var result = this.applyOperation();
@@ -56,38 +60,85 @@ var OperationsPerformer = function() {
 var FiguresAccummulator = function() {
     var figureText = "";
 
-    this.captureFigureInformation = function(sourceElement) {
-        figureText += sourceElement.innerText;
+    this.captureFigureInformation = function(figureInfo) {
+        figureText += figureInfo;
     }
 
-    this.flushFigure = function() {
+    this.retrieveFigure = function() {
         var floatValue = Number.parseFloat(figureText);
-        figureText = "";
         return floatValue;
+    }
+
+    this.clear = function() {
+        figureText = "";
+    }
+
+    this.isEmpty = function() {
+        return figureText === "";
     }
 }
 
 
-var figuresAccummulator = new FiguresAccummulator();
+var ScreenUpdater = function () {
+
+    this.updateMainDisplay = function(screenInformation) {
+        getMainDisplay().innerText = screenInformation;
+    }
+
+    this.clear = function() {
+        getMainDisplay().innerText = "0";
+    }
+
+    function getMainDisplay() {
+        return document.getElementById("main-display");
+    }
+}
 
 
 var OperationsRequestsController = function() {
     var operationsPerformer = new OperationsPerformer();
+    var figuresAccummulator = new FiguresAccummulator();
+    var screenUpdater = new ScreenUpdater();
+
+    this.processFigureSettingRequest = function(sourceElement) {
+        var figureText = sourceElement.innerText;
+        figuresAccummulator.captureFigureInformation(figureText);
+        screenUpdater.updateMainDisplay(figuresAccummulator.retrieveFigure());
+    }
 
     this.processOperationRequest = function(sourceElement) {
-        var firstArgument = figuresAccummulator.flushFigure();
-        operationsPerformer.setArguments(firstArgument);
-        var operationName = sourceElement.id;
-        operationsPerformer.setOperationToPerform(operationName);
+        var firstArgument = figuresAccummulator.retrieveFigure();
+        if (!Number.isNaN(firstArgument)) {
+            operationsPerformer.setArguments(firstArgument);
+            var operationName = sourceElement.id;
+            operationsPerformer.setOperationToPerform(operationName);
+        } else {
+            clearAll();
+        }
+        figuresAccummulator.clear();
     }
 
     this.processRetrieveResultRequest = function() {
-        var complementaryArgument = figuresAccummulator.flushFigure();
+        var complementaryArgument = figuresAccummulator.retrieveFigure();
         operationsPerformer.setArguments(complementaryArgument);
         var operationResult = operationsPerformer.retrieveResult();
-        console.log(operationResult);
+        clearData();
+        screenUpdater.updateMainDisplay(operationResult);
+    }
+
+    function clearAll() {
+        clearData();
+        screenUpdater.clear();
+    }
+
+    function clearData() {
+        operationsPerformer.clear();
+        figuresAccummulator.clear();
     }
 }
+
+
+
 
 
 var operationsRequestsController = new OperationsRequestsController();
