@@ -21,7 +21,10 @@ var OperationsPerformer = function() {
         };
     }
 
-    this.setArguments= function(argument) {
+    this.setArguments = function(argument) {
+        if (Number.isNaN(argument)) {
+            return;
+        }
         complementaryArgument = firstArgument === null ? null : argument;
         firstArgument = firstArgument === null ? argument : firstArgument;
     };
@@ -36,16 +39,16 @@ var OperationsPerformer = function() {
         return firstArgument !== null;
     }
 
-    this.retrieveResult = function() {
-        var result = this.applyOperation();
-        this.clear();
-        return result;
+    this.isReadyToPerformOperation = function() {
+        return firstArgument !== null && operationToApply !== null && complementaryArgument !== null;
     }
 
     this.applyOperation = function() {
         if(operationToApply !== null && complementaryArgument !== null) {
             firstArgument = operationToApply();
         }
+        complementaryArgument = null;
+        operationToApply = null;
         return firstArgument;
     };
 
@@ -53,7 +56,7 @@ var OperationsPerformer = function() {
         firstArgument = null;
         complementaryArgument = null;
         operationToApply = null;
-    };
+    }
 };
 
 
@@ -82,11 +85,12 @@ var FiguresAccummulator = function() {
 var ScreenUpdater = function () {
 
     this.updateMainDisplay = function(screenInformation) {
+        screenInformation = screenInformation === null ? "0." : screenInformation;
         getMainDisplay().innerText = screenInformation;
     }
 
     this.clear = function() {
-        getMainDisplay().innerText = "0";
+        getMainDisplay().innerText = "0.";
     }
 
     function getMainDisplay() {
@@ -107,26 +111,30 @@ var OperationsRequestsController = function() {
     }
 
     this.processOperationRequest = function(sourceElement) {
-        var firstArgument = figuresAccummulator.retrieveFigure();
-        if (!Number.isNaN(firstArgument)) {
-            operationsPerformer.setArguments(firstArgument);
+        var numericArgument = figuresAccummulator.retrieveFigure();
+        operationsPerformer.setArguments(numericArgument);
+        if(operationsPerformer.isReadyToSetOperation()) {
             var operationName = sourceElement.id;
             operationsPerformer.setOperationToPerform(operationName);
-        } else {
-            clearAll();
+            figuresAccummulator.clear();
         }
-        figuresAccummulator.clear();
     }
 
     this.processRetrieveResultRequest = function() {
-        var complementaryArgument = figuresAccummulator.retrieveFigure();
-        operationsPerformer.setArguments(complementaryArgument);
-        var operationResult = operationsPerformer.retrieveResult();
+        peformOperation();
         clearData();
-        screenUpdater.updateMainDisplay(operationResult);
     }
 
-    function clearAll() {
+    function peformOperation() {
+        var complementaryArgument = figuresAccummulator.retrieveFigure();
+        operationsPerformer.setArguments(complementaryArgument);
+        if(operationsPerformer.isReadyToPerformOperation()) {
+            var operationResult = operationsPerformer.applyOperation();
+            screenUpdater.updateMainDisplay(operationResult);
+        }
+    }
+
+    this.clearAll = function() {
         clearData();
         screenUpdater.clear();
     }
@@ -136,9 +144,6 @@ var OperationsRequestsController = function() {
         figuresAccummulator.clear();
     }
 }
-
-
-
 
 
 var operationsRequestsController = new OperationsRequestsController();
