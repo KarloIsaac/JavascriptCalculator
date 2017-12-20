@@ -39,6 +39,10 @@ var OperationsPerformer = function() {
         return firstArgument !== null;
     }
 
+    this.isReadyToSetSecondArgument = function() {
+        return firstArgument !== null && operationToApply !== null;
+    }
+
     this.isReadyToPerformOperation = function() {
         return firstArgument !== null && operationToApply !== null && complementaryArgument !== null;
     }
@@ -61,23 +65,24 @@ var OperationsPerformer = function() {
 
 
 var FiguresAccummulator = function() {
-    var figureText = "";
+    var figureText = null;
 
     this.captureFigureInformation = function(figureInfo) {
-        figureText += figureInfo;
+        figureInfo = figureInfo === "." ? "0." : figureInfo;
+        figureText = figureText === null ? figureInfo : figureText + figureInfo;
     }
 
     this.retrieveFigure = function() {
-        var floatValue = Number.parseFloat(figureText);
+        var floatValue = figureText === null ? null : Number.parseFloat(figureText);
         return floatValue;
     }
 
     this.clear = function() {
-        figureText = "";
+        figureText = null;
     }
 
     this.isEmpty = function() {
-        return figureText === "";
+        return figureText === null;
     }
 }
 
@@ -111,8 +116,12 @@ var OperationsRequestsController = function() {
     }
 
     this.processOperationRequest = function(sourceElement) {
-        var numericArgument = figuresAccummulator.retrieveFigure();
-        operationsPerformer.setArguments(numericArgument);
+        if(operationsPerformer.isReadyToSetSecondArgument()) {
+            peformOperation();
+        } else {
+            var numericArgument = figuresAccummulator.retrieveFigure();
+            operationsPerformer.setArguments(numericArgument);
+        }
         if(operationsPerformer.isReadyToSetOperation()) {
             var operationName = sourceElement.id;
             operationsPerformer.setOperationToPerform(operationName);
@@ -120,9 +129,13 @@ var OperationsRequestsController = function() {
         }
     }
 
+    function concatenateOperation() {
+        var numericArgument = figuresAccummulator.retrieveFigure();
+        operationsPerformer.setArguments(numericArgument);
+    }
+
     this.processRetrieveResultRequest = function() {
         peformOperation();
-        clearData();
     }
 
     function peformOperation() {
