@@ -68,10 +68,21 @@ var FiguresAccummulator = function() {
     var figureText = null;
 
     this.captureFigureInformation = function(figureInfo) {
-        if(figureInfo === "." && figureText !== null && figureText.includes(".")) {
+        if(isDigitsNumberLimitMet()) {
+            return;
+        }
+        if(figureInfo === "." && doesFigureTextAlrreadyHaveADecimalPoint()) {
             figureInfo = "";
         }
         figureText = figureText === null ? figureInfo : figureText + figureInfo;
+    }
+
+    function isDigitsNumberLimitMet() {
+        return figureText !== null && figureText.length >= 10;
+    }
+
+    function doesFigureTextAlrreadyHaveADecimalPoint() {
+        figureText !== null && figureText.includes(".");
     }
 
     this.retrieveFigure = function() {
@@ -92,17 +103,39 @@ var FiguresAccummulator = function() {
 }
 
 
-var ScreenUpdater = function () {
+var FiguresToStringParser = function() {
+    var numericInformation = "0.";
 
-    this.updateMainDisplay = function(screenInformation) {
-        screenInformation = String(screenInformation);
-        screenInformation = screenInformation === null ? "0." : screenInformation;
-        screenInformation = screenInformation.includes(".") ? screenInformation : screenInformation + ".";
-        getMainDisplay().innerText = screenInformation;
+    this.parseFigure = function(figureInformation) {
+        if(figureInformation === null) {
+            clear();
+            return;
+        }
+        figureInformation = String(figureInformation);
+        numericInformation = figureInformation.includes(".") ? figureInformation : figureInformation + ".";
     }
 
+    function clear() {
+        numericInformation = "0.";
+    }
+
+    this.retrieveNumericPortion = function() {
+        return numericInformation;
+    }
+}
+
+
+var ScreenUpdater = function () {
+    var figuresToStringParser = new FiguresToStringParser();
+
     this.clear = function() {
-        getMainDisplay().innerText = "0.";
+        this.updateMainDisplay(null);
+    }
+
+    this.updateMainDisplay = function(screenInformation) {
+        figuresToStringParser.parseFigure(screenInformation);
+        var numericPortion = figuresToStringParser.retrieveNumericPortion();
+        getMainDisplay().innerText = numericPortion;
     }
 
     function getMainDisplay() {
