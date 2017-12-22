@@ -68,12 +68,17 @@ var FiguresAccummulator = function() {
     var figureText = null;
 
     this.captureFigureInformation = function(figureInfo) {
-        figureInfo = figureInfo === "." ? "0." : figureInfo;
+        if(figureInfo === "." && figureText !== null && figureText.includes(".")) {
+            figureInfo = "";
+        }
         figureText = figureText === null ? figureInfo : figureText + figureInfo;
     }
 
     this.retrieveFigure = function() {
-        var floatValue = figureText === null ? null : Number.parseFloat(figureText);
+        var figureRepresentation = figureText === "." ? "0" : figureText;
+        var floatValue = figureRepresentation === null || figureRepresentation === ""
+                ? null
+                : Number.parseFloat(figureRepresentation);
         return floatValue;
     }
 
@@ -90,7 +95,9 @@ var FiguresAccummulator = function() {
 var ScreenUpdater = function () {
 
     this.updateMainDisplay = function(screenInformation) {
+        screenInformation = String(screenInformation);
         screenInformation = screenInformation === null ? "0." : screenInformation;
+        screenInformation = screenInformation.includes(".") ? screenInformation : screenInformation + ".";
         getMainDisplay().innerText = screenInformation;
     }
 
