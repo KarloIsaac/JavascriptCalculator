@@ -8,16 +8,16 @@ var OperationsPerformer = function() {
 
     function initialize() {
         operationsMap.plus = function() {
-            return firstArgument + complementaryArgument;
+            return (firstArgument*10**9 + complementaryArgument*10**9) / 10**9;
         };
         operationsMap.minus = function() {
-            return firstArgument - complementaryArgument;
+            return (firstArgument*10**9 - complementaryArgument*10**9) / 10**9;
         };
         operationsMap.multiply = function() {
-            return firstArgument * complementaryArgument;
+            return ((firstArgument*10**9) * (complementaryArgument*10**9)) / 10**18;
         };
         operationsMap.divide = function() {
-            return firstArgument / complementaryArgument;
+            return (firstArgument*10**9) / (complementaryArgument*10**9);
         };
     }
 

@@ -3,6 +3,16 @@
     grid-template-columns: auto auto auto auto;
 }
 
+#displays {
+    display: flex;
+    justify-content: flex-end;
+    align-items: baseline;
+}
+
+#scientific-notation-display {
+    color: lightgrey;
+}
+
 #plus {
     grid-row: span 2;
 }

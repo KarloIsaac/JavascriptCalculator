@@ -8,7 +8,10 @@
 </head>
 <body>
     <div id="calculator-frame" class="">
-        <h1 id="main-display">0.</h1>        
+        <div id="displays">
+            <h1 id="main-display">0.</h1>
+            <h1 id="scientific-notation-display">x10<sup id="scientific-power">0</sup></h1>
+        </div>
         <div id="buttons-grid" class="">
             <button type="button" id="clear" onclick="operationsRequestsController.clearAll()">C</button>
             <button type="button" id="divide" onclick="operationsRequestsController.processOperationRequest(this)">
@@ -20,7 +23,6 @@
             <button type="button" id="minus" onclick="operationsRequestsController.processOperationRequest(this)">
                 -
             </button>
-
             <button type="button" onclick="operationsRequestsController.processFigureSettingRequest(this)">7</button>
             <button type="button" onclick="operationsRequestsController.processFigureSettingRequest(this)">8</button>
             <button type="button" onclick="operationsRequestsController.processFigureSettingRequest(this)">9</button>
