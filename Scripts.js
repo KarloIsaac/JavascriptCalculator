@@ -105,22 +105,48 @@ var FiguresAccummulator = function() {
 
 var FiguresToStringParser = function() {
     var numericInformation = "0.";
+    var scientificNotationExponential = 0;
 
-    this.parseFigure = function(figureInformation) {
-        if(figureInformation === null) {
-            clear();
+    this.parseFigure = function(figure) {
+        clear();
+        if(figure === null) {
             return;
         }
-        figureInformation = String(figureInformation);
-        numericInformation = figureInformation.includes(".") ? figureInformation : figureInformation + ".";
+        if(shouldUseScientificNotation(figure)) {
+            scientificNotationExponential = calculateScientificNotationExponential(figure);
+            figure = figure / Math.pow(10, scientificNotationExponential);
+        }
+        figure = String(figure);
+        numericInformation = figure.includes(".") ? figure : figure + ".";
     }
 
     function clear() {
         numericInformation = "0.";
+        scientificNotationExponential = 0;
+    }
+
+    function calculateScientificNotationExponential(referenceFigure) {
+        referenceFigure = Math.abs(referenceFigure);
+        var exponential = Math.log10(referenceFigure);
+        exponential = Math.floor(exponential);
+        return exponential;
+    }
+
+    function shouldUseScientificNotation(referenceFigure) {
+        referenceFigure = Math.abs(referenceFigure);
+        return referenceFigure > 99999999999 || referenceFigure < 0.000000001;
+    }
+
+    this.isScientificNotation = function() {
+        return scientificNotationExponential !== 0;
     }
 
     this.retrieveNumericPortion = function() {
         return numericInformation;
+    }
+
+    this.retrieveScientificNotationExponential = function() {
+        return scientificNotationExponential;
     }
 }
 
@@ -136,6 +162,8 @@ var ScreenUpdater = function () {
         figuresToStringParser.parseFigure(screenInformation);
         var numericPortion = figuresToStringParser.retrieveNumericPortion();
         getMainDisplay().innerText = numericPortion;
+        var scientificNotationExponential = figuresToStringParser.retrieveScientificNotationExponential();
+        document.getElementById("scientific-power").innerText = scientificNotationExponential;
     }
 
     function getMainDisplay() {
