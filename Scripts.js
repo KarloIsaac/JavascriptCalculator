@@ -3,21 +3,22 @@ var OperationsPerformer = function() {
     var complementaryArgument = null;
     var operationToApply = null;
     var operationsMap = {};
+    const correctionFactor = 10**10;
 
     initialize();
 
     function initialize() {
         operationsMap.plus = function() {
-            return (firstArgument*10**9 + complementaryArgument*10**9) / 10**9;
+            return (firstArgument*correctionFactor + complementaryArgument*correctionFactor) / correctionFactor;
         };
         operationsMap.minus = function() {
-            return (firstArgument*10**9 - complementaryArgument*10**9) / 10**9;
+            return (firstArgument*correctionFactor - complementaryArgument*correctionFactor) / correctionFactor;
         };
         operationsMap.multiply = function() {
-            return ((firstArgument*10**9) * (complementaryArgument*10**9)) / 10**18;
+            return (correctionFactor * firstArgument * complementaryArgument) / correctionFactor;
         };
         operationsMap.divide = function() {
-            return (firstArgument*10**9) / (complementaryArgument*10**9);
+            return (firstArgument*correctionFactor) / (complementaryArgument*correctionFactor);
         };
     }
 
@@ -134,7 +135,7 @@ var FiguresToStringParser = function() {
 
     function shouldUseScientificNotation(referenceFigure) {
         referenceFigure = Math.abs(referenceFigure);
-        return referenceFigure > 99999999999 || referenceFigure < 0.000000001;
+        return referenceFigure > 9999999999 || referenceFigure < 0.00000001;
     }
 
     this.isScientificNotation = function() {
