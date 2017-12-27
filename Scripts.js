@@ -104,6 +104,9 @@ var FiguresAccummulator = function() {
 }
 
 
+/***
+This class purpose is to
+***/
 var FiguresToStringParser = function() {
     var numericInformation = "0.";
     var scientificNotationExponential = 0;
