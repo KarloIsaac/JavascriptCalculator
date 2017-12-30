@@ -65,33 +65,55 @@ var OperationsPerformer = function() {
 };
 
 
+/*
+Its purpose is to store the characters which will constitute the figure, such characters are: [0-9]+\.[0-9]*
+It only allows the final figure to have a maximum of 10 digits and a decimal point, a total of eleven characters.
+It won’t keep storing characters if this causes the creation of an invalid figure pattern.
+It is able to render the parsed figure as well as the valid sequence of characters stored.
+*/
 var FiguresAccummulator = function() {
     var figureText = null;
+    const figurePattern = /^[0-9]+\.?[0-9]*$/;
+    const onlyDigitsPattern = /^[0-9]{10}$/;
+    const lazyZeroesPattern = /^0+(?=(0.|\d))/;
 
     this.captureFigureInformation = function(figureInfo) {
         if(isDigitsNumberLimitMet()) {
             return;
         }
-        if(figureInfo === "." && doesFigureTextAlrreadyHaveADecimalPoint()) {
-            figureInfo = "";
+        var potentialNewFigureCharactersStore = figureText === null ? figureInfo : figureText + figureInfo;
+        potentialNewFigureCharactersStore = potentialNewFigureCharactersStore === "."
+                ? "0."
+                : potentialNewFigureCharactersStore;
+        potentialNewFigureCharactersStore = removeLazyZeroes(potentialNewFigureCharactersStore);
+        if(figurePattern.test(potentialNewFigureCharactersStore)) {
+            figureText = potentialNewFigureCharactersStore;
         }
-        figureText = figureText === null ? figureInfo : figureText + figureInfo;
     }
 
     function isDigitsNumberLimitMet() {
-        return figureText !== null && figureText.length >= 10;
+        if(figureText !== null && (onlyDigitsPattern.test(figureText) || figureText.length >= 11)) {
+            return true;
+        }
+        return false;
     }
 
-    function doesFigureTextAlrreadyHaveADecimalPoint() {
-        figureText !== null && figureText.includes(".");
+    function removeLazyZeroes(digitsStorage) {
+        var lazyZeroesFreeString = digitsStorage.replace(lazyZeroesPattern, "");
+        return lazyZeroesFreeString;
     }
 
     this.retrieveFigure = function() {
-        var figureRepresentation = figureText === "." ? "0" : figureText;
-        var floatValue = figureRepresentation === null || figureRepresentation === ""
+        var floatValue = figureText === null || figureText === ""
                 ? null
-                : Number.parseFloat(figureRepresentation);
+                : Number.parseFloat(figureText);
         return floatValue;
+    }
+
+    this.retrieveFigureCharacters = function() {
+        var storedCharacters = figureText === null ? "0" : figureText;
+        storedCharacters = storedCharacters.includes(".") ? storedCharacters : storedCharacters + ".";
+        return storedCharacters;
     }
 
     this.clear = function() {
@@ -105,15 +127,16 @@ var FiguresAccummulator = function() {
 
 
 /***
-This class purpose is to
+This logic unit purpose is to receive numeric information and, if necessary, transform it into scientific notation.
+It is able to say if the data required scientific notation parsing.
 ***/
-var FiguresToStringParser = function() {
+var ScientificNotationParser = function() {
     var numericInformation = "0.";
     var scientificNotationExponential = 0;
 
     this.parseFigure = function(figure) {
         clear();
-        if(figure === null) {
+        if(!isNumber(figure) || figure === 0) {
             return;
         }
         if(shouldUseScientificNotation(figure)) {
@@ -127,6 +150,10 @@ var FiguresToStringParser = function() {
     function clear() {
         numericInformation = "0.";
         scientificNotationExponential = 0;
+    }
+
+    function isNumber(assessingValue) {
+        return isFinite(assessingValue) && assessingValue === +assessingValue;
     }
 
     function calculateScientificNotationExponential(referenceFigure) {
@@ -155,18 +182,31 @@ var FiguresToStringParser = function() {
 }
 
 
+/*
+Its purpose is to receive the information that requires to be updated on the main display.
+This information should have two possible natures: numeric information and text information with the capability of becoming numeric data.
+This logic unit is not in charge of assessing the latter case.
+In the case of numeric data, adjustments must be done to ensure that the information is appropriately displayed.
+This logic unit makes no adjustment but coordinates them.
+*/
 var ScreenUpdater = function () {
-    var figuresToStringParser = new FiguresToStringParser();
+    var scientificNotationParser = new ScientificNotationParser();
 
     this.clear = function() {
-        this.updateMainDisplay(null);
+        this.updateMainDisplay("0.");
     }
 
     this.updateMainDisplay = function(screenInformation) {
-        figuresToStringParser.parseFigure(screenInformation);
-        var numericPortion = figuresToStringParser.retrieveNumericPortion();
+        var numericPortion = "";
+        var scientificNotationExponential = 0;
+        scientificNotationParser.parseFigure(screenInformation);
+        if(scientificNotationParser.isScientificNotation()) {
+            numericPortion = scientificNotationParser.retrieveNumericPortion();
+            var scientificNotationExponential = scientificNotationParser.retrieveScientificNotationExponential();
+        } else {
+            numericPortion = screenInformation;
+        }
         getMainDisplay().innerText = numericPortion;
-        var scientificNotationExponential = figuresToStringParser.retrieveScientificNotationExponential();
         document.getElementById("scientific-power").innerText = scientificNotationExponential;
     }
 
@@ -184,7 +224,7 @@ var OperationsRequestsController = function() {
     this.processFigureSettingRequest = function(sourceElement) {
         var figureText = sourceElement.innerText;
         figuresAccummulator.captureFigureInformation(figureText);
-        screenUpdater.updateMainDisplay(figuresAccummulator.retrieveFigure());
+        screenUpdater.updateMainDisplay(figuresAccummulator.retrieveFigureCharacters());
     }
 
     this.processOperationRequest = function(sourceElement) {
