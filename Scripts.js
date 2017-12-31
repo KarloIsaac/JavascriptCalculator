@@ -23,11 +23,14 @@ var OperationsPerformer = function() {
     }
 
     this.setArguments = function(argument) {
-        if (Number.isNaN(argument)) {
+        if (Number.isNaN(argument) || argument == null) {
             return;
         }
-        complementaryArgument = firstArgument === null ? null : argument;
-        firstArgument = firstArgument === null ? argument : firstArgument;
+        if(this.isReadyToSetSecondArgument()) {
+            complementaryArgument = argument;
+            return;
+        }
+        firstArgument = argument;
     };
 
     this.setOperationToPerform = function(operationSymbol) {
@@ -256,6 +259,7 @@ var OperationsRequestsController = function() {
         if(operationsPerformer.isReadyToPerformOperation()) {
             var operationResult = operationsPerformer.applyOperation();
             screenUpdater.updateMainDisplay(operationResult);
+            figuresAccummulator.clear();
         }
     }
 
