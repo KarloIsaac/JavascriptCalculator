@@ -55,6 +55,10 @@ var OperationsPerformer = function() {
         if(operationToApply !== null && complementaryArgument !== null) {
             firstArgument = operationToApply();
         }
+        if (firstArgument === Infinity) {
+            this.clear();
+            return Infinity;
+        }
         complementaryArgument = null;
         operationToApply = null;
         return firstArgument;
@@ -115,7 +119,6 @@ var FiguresAccummulator = function() {
 
     this.retrieveFigureCharacters = function() {
         var storedCharacters = figureText === null ? "0" : figureText;
-        storedCharacters = storedCharacters.includes(".") ? storedCharacters : storedCharacters + ".";
         return storedCharacters;
     }
 
@@ -134,7 +137,7 @@ This logic unit purpose is to receive numeric information and, if necessary, tra
 It is able to say if the data required scientific notation parsing.
 ***/
 var ScientificNotationParser = function() {
-    var numericInformation = "0.";
+    var numericInformation = 0;
     var scientificNotationExponential = 0;
 
     this.parseFigure = function(figure) {
@@ -146,12 +149,11 @@ var ScientificNotationParser = function() {
             scientificNotationExponential = calculateScientificNotationExponential(figure);
             figure = figure / Math.pow(10, scientificNotationExponential);
         }
-        figure = String(figure);
-        numericInformation = figure.includes(".") ? figure : figure + ".";
+        numericInformation = figure;
     }
 
     function clear() {
-        numericInformation = "0.";
+        numericInformation = 0;
         scientificNotationExponential = 0;
     }
 
@@ -203,14 +205,24 @@ var ScreenUpdater = function () {
         var numericPortion = "";
         var scientificNotationExponential = 0;
         scientificNotationParser.parseFigure(screenInformation);
-        if(scientificNotationParser.isScientificNotation()) {
-            numericPortion = scientificNotationParser.retrieveNumericPortion();
+        if(screenInformation === Infinity) {
+            numericPortion = "Err.";
+        } else if(scientificNotationParser.isScientificNotation()) {
+            numericPortion = parseMainDisplayInformation(scientificNotationParser.retrieveNumericPortion());
             var scientificNotationExponential = scientificNotationParser.retrieveScientificNotationExponential();
         } else {
-            numericPortion = screenInformation;
+            numericPortion = parseMainDisplayInformation(screenInformation);
         }
         getMainDisplay().innerText = numericPortion;
         document.getElementById("scientific-power").innerText = scientificNotationExponential;
+    }
+
+    function parseMainDisplayInformation(referenceNumericValue) {
+        var mainDisplayInformation = String(referenceNumericValue);
+        mainDisplayInformation = mainDisplayInformation.includes(".")
+                ? mainDisplayInformation
+                : mainDisplayInformation + ".";
+        return mainDisplayInformation;
     }
 
     function getMainDisplay() {
