@@ -204,25 +204,39 @@ var ScreenUpdater = function () {
     this.updateMainDisplay = function(screenInformation) {
         var numericPortion = "";
         var scientificNotationExponential = 0;
-        scientificNotationParser.parseFigure(screenInformation);
         if(screenInformation === Infinity) {
             numericPortion = "Err.";
-        } else if(scientificNotationParser.isScientificNotation()) {
-            numericPortion = parseMainDisplayInformation(scientificNotationParser.retrieveNumericPortion());
-            var scientificNotationExponential = scientificNotationParser.retrieveScientificNotationExponential();
+        } else if(typeof screenInformation === "string") {
+            numericPortion = adjustDecimalPointPresentation(screenInformation);
         } else {
-            numericPortion = parseMainDisplayInformation(screenInformation);
+            scientificNotationParser.parseFigure(screenInformation);
+            numericPortion = adjustNumberPresentation(scientificNotationParser.retrieveNumericPortion());
+            var scientificNotationExponential = scientificNotationParser.retrieveScientificNotationExponential();
         }
         getMainDisplay().innerText = numericPortion;
         document.getElementById("scientific-power").innerText = scientificNotationExponential;
     }
 
-    function parseMainDisplayInformation(referenceNumericValue) {
-        var mainDisplayInformation = String(referenceNumericValue);
-        mainDisplayInformation = mainDisplayInformation.includes(".")
-                ? mainDisplayInformation
-                : mainDisplayInformation + ".";
-        return mainDisplayInformation;
+    function adjustNumberPresentation(referenceNumericValue) {
+        referenceNumericValue = truncateToTenDigits(referenceNumericValue);
+        return adjustDecimalPointPresentation(referenceNumericValue);
+    }
+
+    function truncateToTenDigits(figure) {
+    	var signAdjustment = figure < 0 ? -1 : 1;
+    	figure = Math.abs(figure);
+    	var roundPositions = 9 - (figure < 1 ? 0 : Math.floor(Math.log10(figure)));
+    	var roundingFactor = 10**roundPositions;
+    	var truncatedFigure = Math.round((figure + Number.EPSILON) * roundingFactor ) / roundingFactor;
+    	return truncatedFigure * signAdjustment;
+    }
+
+    function adjustDecimalPointPresentation(referenceNumericValue) {
+        var adjustedNumericPresentation = String(referenceNumericValue);
+        adjustedNumericPresentation = adjustedNumericPresentation.includes(".")
+                ? adjustedNumericPresentation
+                : adjustedNumericPresentation + ".";
+        return adjustedNumericPresentation;
     }
 
     function getMainDisplay() {
