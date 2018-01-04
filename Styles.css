@@ -1,3 +1,8 @@
+@font-face {
+  font-family: "SF Digital Readout";
+  src: URL("digital-readout.ttf");
+}
+
 #buttons-grid {
     display: grid;
     grid-template-columns: auto auto auto auto;
@@ -19,9 +24,13 @@
 
 #zero {
     grid-column: span 2;
-
 }
 
 #equals {
     grid-row: span 2;
+}
+
+h1 {
+    font-family: "SF Digital Readout";
+    color: blue;
 }

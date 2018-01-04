@@ -189,10 +189,9 @@ var ScientificNotationParser = function() {
 
 /*
 Its purpose is to receive the information that requires to be updated on the main display.
-This information should have two possible natures: numeric information and text information with the capability of becoming numeric data.
-This logic unit is not in charge of assessing the latter case.
-In the case of numeric data, adjustments must be done to ensure that the information is appropriately displayed.
-This logic unit makes no adjustment but coordinates them.
+The display has only the capability to display 11 characters: 10 numbers an one decimal point.
+The information may be adjusted to be appropriately displayed, for instance the number may need a scientific notation
+parsing.
 */
 var ScreenUpdater = function () {
     var scientificNotationParser = new ScientificNotationParser();
@@ -211,10 +210,10 @@ var ScreenUpdater = function () {
         } else {
             scientificNotationParser.parseFigure(screenInformation);
             numericPortion = adjustNumberPresentation(scientificNotationParser.retrieveNumericPortion());
-            var scientificNotationExponential = scientificNotationParser.retrieveScientificNotationExponential();
+            scientificNotationExponential = scientificNotationParser.retrieveScientificNotationExponential();
         }
         getMainDisplay().innerText = numericPortion;
-        document.getElementById("scientific-power").innerText = scientificNotationExponential;
+        displayScientificPower(scientificNotationExponential);
     }
 
     function adjustNumberPresentation(referenceNumericValue) {
@@ -241,6 +240,10 @@ var ScreenUpdater = function () {
 
     function getMainDisplay() {
         return document.getElementById("main-display");
+    }
+
+    function displayScientificPower(powerNumber) {
+        document.getElementById("scientific-power").innerText = powerNumber;
     }
 }
 
