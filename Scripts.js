@@ -195,6 +195,20 @@ parsing.
 */
 var ScreenUpdater = function () {
     var scientificNotationParser = new ScientificNotationParser();
+    var numberImagesMap = {".":buildImage("dot"), "0":buildImage("0"), "1":buildImage("1"), "2":buildImage("2"),
+            "3":buildImage("3"), "4":buildImage("4"), "5":buildImage("5"), "6":buildImage("6"), "7":buildImage("7"),
+            "8":buildImage("8"), "9":buildImage("9")};
+
+
+    function buildImage(imageName) {
+        var imageRoute = "https://raw.githubusercontent.com/KarloIsaac/JavascriptCalculator/" +
+                "master/number_Images/big/" + imageName + ".png";
+        var imageElement = document.createElement("img");
+        imageElement.src = imageRoute;
+        imageElement.alt = imageName;
+        return imageElement;
+    }
+
 
     this.clear = function() {
         this.updateMainDisplay("0.");
@@ -212,7 +226,7 @@ var ScreenUpdater = function () {
             numericPortion = adjustNumberPresentation(scientificNotationParser.retrieveNumericPortion());
             scientificNotationExponential = scientificNotationParser.retrieveScientificNotationExponential();
         }
-        getMainDisplay().innerText = numericPortion;
+        displayNuber(numericPortion);
         displayScientificPower(scientificNotationExponential);
     }
 
@@ -238,7 +252,7 @@ var ScreenUpdater = function () {
         return adjustedNumericPresentation;
     }
 
-    function getMainDisplay() {
+    function displayNuber(numberText) {
         return document.getElementById("main-display");
     }
 
