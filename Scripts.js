@@ -195,20 +195,20 @@ parsing.
 */
 var ScreenUpdater = function () {
     var scientificNotationParser = new ScientificNotationParser();
-    var numberImagesMap = {".":buildImage("dot"), "0":buildImage("0"), "1":buildImage("1"), "2":buildImage("2"),
-            "3":buildImage("3"), "4":buildImage("4"), "5":buildImage("5"), "6":buildImage("6"), "7":buildImage("7"),
-            "8":buildImage("8"), "9":buildImage("9")};
+    var charImageMap = {"E":buildCharImage("E"), "r":buildCharImage("r"), ".":buildCharImage("dot"),
+            "0":buildCharImage("0"), "1":buildCharImage("1"), "2":buildCharImage("2"), "3":buildCharImage("3"),
+            "4":buildCharImage("4"), "5":buildCharImage("5"), "6":buildCharImage("6"), "7":buildCharImage("7"),
+            "8":buildCharImage("8"), "9":buildCharImage("9")};
 
-
-    function buildImage(imageName) {
+    function buildCharImage(imageName) {
+        var fileName = imageName === "." ? "dot" : imageName;
         var imageRoute = "https://raw.githubusercontent.com/KarloIsaac/JavascriptCalculator/" +
-                "master/number_Images/big/" + imageName + ".png";
+                "master/number_Images/big/" + fileName + ".png";
         var imageElement = document.createElement("img");
         imageElement.src = imageRoute;
         imageElement.alt = imageName;
         return imageElement;
     }
-
 
     this.clear = function() {
         this.updateMainDisplay("0.");
@@ -253,7 +253,12 @@ var ScreenUpdater = function () {
     }
 
     function displayNuber(numberText) {
-        return document.getElementById("main-display");
+        var mainDisplay = document.getElementById("main-display");
+        mainDisplay.innerHTML = "";
+        numberText.split("").forEach(char => {
+            var imageChar = charImageMap[char].cloneNode();
+            mainDisplay.appendChild(imageChar);
+        });
     }
 
     function displayScientificPower(powerNumber) {
