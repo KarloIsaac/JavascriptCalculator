@@ -221,7 +221,7 @@ ScientificDisplayUpdater = function() {
 
     function buildCharImage(imageName) {
         var imageRoute = "https://raw.githubusercontent.com/KarloIsaac/JavascriptCalculator/" +
-                "master/number_Images/small/" + imageName + ".png";
+                "master/number_Images/smaller/" + imageName + ".png";
         var imageElement = document.createElement("img");
         imageElement.src = imageRoute;
         imageElement.alt = imageName;
