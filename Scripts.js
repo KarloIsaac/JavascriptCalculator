@@ -228,7 +228,8 @@ ScientificDisplayUpdater = function() {
         return imageElement;
     }
 
-	this.updateDisplay = function(numberText) {
+	this.updateDisplay = function(number) {
+		var numberText = String(number);
 		var display = document.getElementById("scientific-power");
         display.innerHTML = "";
         numberText.split("").forEach(char => {
