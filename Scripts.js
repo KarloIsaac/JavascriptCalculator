@@ -187,15 +187,8 @@ var ScientificNotationParser = function() {
 }
 
 
-/*
-Its purpose is to receive the information that requires to be updated on the main display.
-The display has only the capability to display 11 characters: 10 numbers an one decimal point.
-The information may be adjusted to be appropriately displayed, for instance the number may need a scientific notation
-parsing.
-*/
-var ScreenUpdater = function () {
-    var scientificNotationParser = new ScientificNotationParser();
-    var charImageMap = {"E":buildCharImage("E"), "r":buildCharImage("r"), ".":buildCharImage("dot"),
+MainDisplayUpdater = function() {
+	var charImageMap = {"E":buildCharImage("E"), "r":buildCharImage("r"), ".":buildCharImage("dot"),
             "0":buildCharImage("0"), "1":buildCharImage("1"), "2":buildCharImage("2"), "3":buildCharImage("3"),
             "4":buildCharImage("4"), "5":buildCharImage("5"), "6":buildCharImage("6"), "7":buildCharImage("7"),
             "8":buildCharImage("8"), "9":buildCharImage("9")};
@@ -210,11 +203,57 @@ var ScreenUpdater = function () {
         return imageElement;
     }
 
-    this.clear = function() {
-        this.updateMainDisplay("0.");
+	this.updateDisplay = function(numberText) {
+        var mainDisplay = document.getElementById("main-display");
+        mainDisplay.innerHTML = "";
+        numberText.split("").forEach(char => {
+            var imageChar = charImageMap[char].cloneNode();
+            mainDisplay.appendChild(imageChar);
+        });
+    }
+}
+
+
+ScientificDisplayUpdater = function() {
+	var charImageMap = {"0":buildCharImage("0"), "1":buildCharImage("1"), "2":buildCharImage("2"),
+			"3":buildCharImage("3"), "4":buildCharImage("4"), "5":buildCharImage("5"), "6":buildCharImage("6"),
+			"7":buildCharImage("7"), "8":buildCharImage("8"), "9":buildCharImage("9")};
+
+    function buildCharImage(imageName) {
+        var imageRoute = "https://raw.githubusercontent.com/KarloIsaac/JavascriptCalculator/" +
+                "master/number_Images/small/" + imageName + ".png";
+        var imageElement = document.createElement("img");
+        imageElement.src = imageRoute;
+        imageElement.alt = imageName;
+        return imageElement;
     }
 
-    this.updateMainDisplay = function(screenInformation) {
+	this.updateDisplay = function(numberText) {
+		var display = document.getElementById("scientific-power");
+        display.innerHTML = "";
+        numberText.split("").forEach(char => {
+            var imageChar = charImageMap[char].cloneNode();
+            display.appendChild(imageChar);
+        });
+    }
+}
+
+/*
+Its purpose is to receive the information that requires to be updated on the main display.
+The display has only the capability to display 11 characters: 10 numbers an one decimal point.
+The information may be adjusted to be appropriately displayed, for instance the number may need a scientific notation
+parsing.
+*/
+var ScreenUpdater = function () {
+    var scientificNotationParser = new ScientificNotationParser();
+	var mainDisplayUpdater = new MainDisplayUpdater();
+	var scientificDisplayUpdater = new ScientificDisplayUpdater();
+
+    this.clear = function() {
+        this.updateDisplay("0.");
+    }
+
+    this.updateDisplay = function(screenInformation) {
         var numericPortion = "";
         var scientificNotationExponential = 0;
         if(screenInformation === Infinity) {
@@ -226,8 +265,8 @@ var ScreenUpdater = function () {
             numericPortion = adjustNumberPresentation(scientificNotationParser.retrieveNumericPortion());
             scientificNotationExponential = scientificNotationParser.retrieveScientificNotationExponential();
         }
-        displayNuber(numericPortion);
-        displayScientificPower(scientificNotationExponential);
+        mainDisplayUpdater.updateDisplay(numericPortion);
+        scientificDisplayUpdater.updateDisplay(scientificNotationExponential);
     }
 
     function adjustNumberPresentation(referenceNumericValue) {
@@ -252,15 +291,6 @@ var ScreenUpdater = function () {
         return adjustedNumericPresentation;
     }
 
-    function displayNuber(numberText) {
-        var mainDisplay = document.getElementById("main-display");
-        mainDisplay.innerHTML = "";
-        numberText.split("").forEach(char => {
-            var imageChar = charImageMap[char].cloneNode();
-            mainDisplay.appendChild(imageChar);
-        });
-    }
-
     function displayScientificPower(powerNumber) {
         document.getElementById("scientific-power").innerText = powerNumber;
     }
@@ -275,7 +305,7 @@ var OperationsRequestsController = function() {
     this.processFigureSettingRequest = function(sourceElement) {
         var figureText = sourceElement.innerText;
         figuresAccummulator.captureFigureInformation(figureText);
-        screenUpdater.updateMainDisplay(figuresAccummulator.retrieveFigureCharacters());
+        screenUpdater.updateDisplay(figuresAccummulator.retrieveFigureCharacters());
     }
 
     this.processOperationRequest = function(sourceElement) {
@@ -306,7 +336,7 @@ var OperationsRequestsController = function() {
         operationsPerformer.setArguments(complementaryArgument);
         if(operationsPerformer.isReadyToPerformOperation()) {
             var operationResult = operationsPerformer.applyOperation();
-            screenUpdater.updateMainDisplay(operationResult);
+            screenUpdater.updateDisplay(operationResult);
             figuresAccummulator.clear();
         }
     }
