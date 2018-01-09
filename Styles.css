@@ -11,6 +11,8 @@
 
 #scientific-notation-display {
     color: rgb(160, 181, 186);
+	font-size: 43px;
+    font-family:"Open Sans Condensed";
 }
 
 #plus {

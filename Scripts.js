@@ -191,7 +191,7 @@ MainDisplayUpdater = function() {
 	var charImageMap = {"E":buildCharImage("E"), "r":buildCharImage("r"), ".":buildCharImage("dot"),
             "0":buildCharImage("0"), "1":buildCharImage("1"), "2":buildCharImage("2"), "3":buildCharImage("3"),
             "4":buildCharImage("4"), "5":buildCharImage("5"), "6":buildCharImage("6"), "7":buildCharImage("7"),
-            "8":buildCharImage("8"), "9":buildCharImage("9")};
+            "8":buildCharImage("8"), "9":buildCharImage("9"), "-":buildCharImage("-")};
 
     function buildCharImage(imageName) {
         var fileName = imageName === "." ? "dot" : imageName;
@@ -217,7 +217,8 @@ MainDisplayUpdater = function() {
 ScientificDisplayUpdater = function() {
 	var charImageMap = {"0":buildCharImage("0"), "1":buildCharImage("1"), "2":buildCharImage("2"),
 			"3":buildCharImage("3"), "4":buildCharImage("4"), "5":buildCharImage("5"), "6":buildCharImage("6"),
-			"7":buildCharImage("7"), "8":buildCharImage("8"), "9":buildCharImage("9")};
+			"7":buildCharImage("7"), "8":buildCharImage("8"), "9":buildCharImage("9"), "-":buildCharImage("-"),
+			"0clear":buildCharImage("0clear")};
 
     function buildCharImage(imageName) {
         var imageRoute = "https://raw.githubusercontent.com/KarloIsaac/JavascriptCalculator/" +
@@ -229,14 +230,32 @@ ScientificDisplayUpdater = function() {
     }
 
 	this.updateDisplay = function(number) {
-		var numberText = String(number);
 		var display = document.getElementById("scientific-power");
-        display.innerHTML = "";
+		display.innerHTML = "";
+		if(number === 0) {
+			clear();
+			return;
+		}
+		setBaseColor(true);
+		var numberText = String(number);		
         numberText.split("").forEach(char => {
             var imageChar = charImageMap[char].cloneNode();
             display.appendChild(imageChar);
         });
     }
+
+	function clear() {
+		var imageChar = charImageMap["0clear"];
+		var powerDisplay = document.getElementById("scientific-power");
+		powerDisplay.appendChild(imageChar);
+		setBaseColor(false);
+	}
+
+	function setBaseColor(isEnabled) {
+		var color = isEnabled ? "black" : "rgb(160, 181, 186)";
+		var baseDisplay = document.getElementById("scientific-notation-display");
+		baseDisplay.style.color = color;
+	}
 }
 
 /*
