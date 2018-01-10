@@ -1,18 +1,29 @@
-#buttons-grid {
-    display: grid;
-    grid-template-columns: auto auto auto auto;
+#calculator-frame {
+	border-color: #9C27B0;
+	border-style: dashed;
+	padding: 10px;
 }
 
 #displays {
     display: flex;
     justify-content: flex-end;
     align-items: baseline;
+    background-color: rgb(175, 196, 201);
 }
 
 #scientific-notation-display {
     color: rgb(160, 181, 186);
 	font-size: 43px;
     font-family:"Open Sans Condensed";
+}
+
+#scientific-power {
+	font-size:xx-small;
+}
+
+#buttons-grid {
+    display: grid;
+    grid-template-columns: auto auto auto auto;
 }
 
 #plus {
@@ -25,8 +36,4 @@
 
 #equals {
     grid-row: span 2;
-}
-
-#displays {
-    background-color: rgb(175, 196, 201);
 }

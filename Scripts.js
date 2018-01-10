@@ -191,7 +191,8 @@ MainDisplayUpdater = function() {
 	var charImageMap = {"E":buildCharImage("E"), "r":buildCharImage("r"), ".":buildCharImage("dot"),
             "0":buildCharImage("0"), "1":buildCharImage("1"), "2":buildCharImage("2"), "3":buildCharImage("3"),
             "4":buildCharImage("4"), "5":buildCharImage("5"), "6":buildCharImage("6"), "7":buildCharImage("7"),
-            "8":buildCharImage("8"), "9":buildCharImage("9"), "-":buildCharImage("-")};
+            "8":buildCharImage("8"), "9":buildCharImage("9"), "-":buildCharImage("-"),
+			"¬":buildCharImage("0clear")};
 
     function buildCharImage(imageName) {
         var fileName = imageName === "." ? "dot" : imageName;
@@ -204,6 +205,7 @@ MainDisplayUpdater = function() {
     }
 
 	this.updateDisplay = function(numberText) {
+		numberText = prependEmptyImageSymbol(numberText);
         var mainDisplay = document.getElementById("main-display");
         mainDisplay.innerHTML = "";
         numberText.split("").forEach(char => {
@@ -211,6 +213,12 @@ MainDisplayUpdater = function() {
             mainDisplay.appendChild(imageChar);
         });
     }
+
+	function prependEmptyImageSymbol(referenceText) {
+		var slotsToFill = 12 - referenceText.length;
+		var emptySymbolString = "¬".repeat(slotsToFill);
+		return emptySymbolString + referenceText;
+	}
 }
 
 
@@ -218,7 +226,7 @@ ScientificDisplayUpdater = function() {
 	var charImageMap = {"0":buildCharImage("0"), "1":buildCharImage("1"), "2":buildCharImage("2"),
 			"3":buildCharImage("3"), "4":buildCharImage("4"), "5":buildCharImage("5"), "6":buildCharImage("6"),
 			"7":buildCharImage("7"), "8":buildCharImage("8"), "9":buildCharImage("9"), "-":buildCharImage("-"),
-			"0clear":buildCharImage("0clear")};
+			"¬":buildCharImage("0clear")};
 
     function buildCharImage(imageName) {
         var imageRoute = "https://raw.githubusercontent.com/KarloIsaac/JavascriptCalculator/" +
@@ -230,25 +238,29 @@ ScientificDisplayUpdater = function() {
     }
 
 	this.updateDisplay = function(number) {
+		if(number === 0) {
+			displayPowerText("¬¬¬");
+			setBaseColor(false);
+		} else {
+			displayPowerText(String(number));
+			setBaseColor(true);
+		}
+    }
+
+	function displayPowerText(text) {
+		text = appendEmptyImageSymbol(text);
 		var display = document.getElementById("scientific-power");
 		display.innerHTML = "";
-		if(number === 0) {
-			clear();
-			return;
-		}
-		setBaseColor(true);
-		var numberText = String(number);		
-        numberText.split("").forEach(char => {
+		text.split("").forEach(char => {
             var imageChar = charImageMap[char].cloneNode();
             display.appendChild(imageChar);
         });
-    }
+	}
 
-	function clear() {
-		var imageChar = charImageMap["0clear"];
-		var powerDisplay = document.getElementById("scientific-power");
-		powerDisplay.appendChild(imageChar);
-		setBaseColor(false);
+	function appendEmptyImageSymbol(referenceText) {
+		var slotsToFill = 4 - referenceText.length;
+		var emptySymbolString = "¬".repeat(slotsToFill);
+		return referenceText + emptySymbolString;
 	}
 
 	function setBaseColor(isEnabled) {
