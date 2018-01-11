@@ -1,14 +1,18 @@
 #calculator-frame {
+	display: flex;
+	flex-direction: column;
 	border-color: #9C27B0;
 	border-style: dashed;
 	padding: 10px;
+	width:380px;
 }
 
 #displays {
     display: flex;
-    justify-content: flex-end;
+    justify-content: center;
     align-items: baseline;
     background-color: rgb(175, 196, 201);
+    border-radius: 15px;
 }
 
 #scientific-notation-display {
@@ -22,8 +26,11 @@
 }
 
 #buttons-grid {
+	padding-top: 10px;
     display: grid;
-    grid-template-columns: auto auto auto auto;
+    grid-template-columns: repeat(4, 1fr);
+    grid-auto-rows: 50px;
+    grid-gap: 25px;
 }
 
 #plus {
