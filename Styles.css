@@ -1,10 +1,12 @@
 #calculator-frame {
 	display: flex;
 	flex-direction: column;
-	border-color: #9C27B0;
+	border-color: #9E9E9E;
 	border-style: dashed;
+	border-width: 1px;
 	padding: 10px;
 	width:380px;
+	background-color: #9C27B0;
 }
 
 #displays {
@@ -28,9 +30,20 @@
 #buttons-grid {
 	padding-top: 10px;
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    justify-content: center;
+    grid-template-columns: repeat(4, 55px);
     grid-auto-rows: 50px;
     grid-gap: 25px;
+}
+
+#buttons-grid>button {
+	border-radius: 3px;
+	outline: none;
+	background-image: linear-gradient(rgba(255,255,255,0.8), rgba(255,255,255,0.2) 50%, rgba(255,255,255,0.0)51%, rgba(255,255,255,0.0)),
+			linear-gradient(#bfbdbd7d, #ffffff82);
+	background-color: #ffffff00;
+	color: #ffffffb5;
+	font-size: xx-large;
 }
 
 #plus {
