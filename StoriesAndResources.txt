@@ -4,7 +4,7 @@ User Story: I can keep chaining mathematical operations together until I hit the
 
 example: https://codepen.io/freeCodeCamp/full/rLJZrA
 
-How to manage division by zero and othe errors?, should I prevent that they happen?
-Should I use scientific notation for large figures?
-Should I add parenthesis to group the calculations?
-I could design a "retro" screen that displays the marks of the symbols
+circuit images links:
+https://cdn.pixabay.com/photo/2014/12/11/22/09/board-564811_960_720.jpg
+https://cdn.pixabay.com/photo/2016/05/16/20/44/technology-1396677_960_720.jpg
+https://cdn.pixabay.com/photo/2017/07/01/23/16/electronics-2463106_960_720.jpg

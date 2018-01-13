@@ -4,9 +4,20 @@
 	border-color: #9E9E9E;
 	border-style: dashed;
 	border-width: 1px;
+	border-radius: 10px;
 	padding: 10px;
 	width:380px;
-	background-color: #9C27B0;
+	background-image: url("https://cdn.pixabay.com/photo/2016/05/16/20/44/technology-1396677_960_720.jpg");
+	background-position: -400px -20px;
+	color: #ffffffb5;
+}
+
+#brand {
+	font-family: "Great Vibes";
+	font-style: italic;
+	text-align: center;
+	width: 200px;
+	align-self: center;
 }
 
 #displays {
@@ -28,7 +39,7 @@
 }
 
 #buttons-grid {
-	padding-top: 10px;
+	padding-top: 30px;
     display: grid;
     justify-content: center;
     grid-template-columns: repeat(4, 55px);
@@ -42,7 +53,7 @@
 	background-image: linear-gradient(rgba(255,255,255,0.8), rgba(255,255,255,0.2) 50%, rgba(255,255,255,0.0)51%, rgba(255,255,255,0.0)),
 			linear-gradient(#bfbdbd7d, #ffffff82);
 	background-color: #ffffff00;
-	color: #ffffffb5;
+	color: inherit;
 	font-size: xx-large;
 }
 
